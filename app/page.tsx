@@ -8,7 +8,7 @@ export default function HomePage() {
         <p className="mb-3 text-sm font-semibold uppercase text-accent">Local services, booked ahead</p>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-normal md:text-6xl">Tend</h1>
         <p className="mt-5 max-w-xl text-lg leading-8 text-muted">
-          Browse nearby laundry, cleaning, dispatch, and errand providers. Pick a slot, pay upfront, and manage the
+          Browse nearby laundry, cleaning, dispatch, and errand providers. Pick a slot, pay upfront in solana/cash, and manage the
           booking without back-and-forth calls.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
