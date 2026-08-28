@@ -33,6 +33,8 @@ PAYSTACK_PUBLIC_KEY=
 RESEND_API_KEY=
 CANCELLATION_WINDOW_HOURS=24
 ENCRYPTION_KEY=
+SOLANA_RPC_URL=
+MERCHANT_WALLET_PUBLIC_KEY=
 ```
 
 For local development, set `NEXTAUTH_URL` to your local app URL. In production, set it to the deployed Vercel URL.
@@ -91,6 +93,22 @@ POST /api/cron/reminders
 ```
 
 The route marks elapsed bookings as `COMPLETED` and sends 24-hour and 1-hour reminder emails when the request falls inside the reminder window.
+
+## Solana Pay Demo Checkout
+
+This demo flow adds a Solana Pay checkout without changing the existing Paystack booking flow. Set `MERCHANT_WALLET_PUBLIC_KEY` to the receiving wallet address. `SOLANA_RPC_URL` is optional and defaults to Solana devnet.
+
+To test:
+
+```bash
+solana config set --url devnet
+solana airdrop 2
+npm install
+npm run prisma:migrate
+npm run dev
+```
+
+Open a booking confirmation screen that renders `SolanaPayCheckout` with a booking id, then pay the QR code or wallet link using Phantom set to devnet. The status endpoint polls Solana devnet by payment reference and marks the booking payment as `CONFIRMED` after `validateTransfer()` confirms the recipient, amount, and reference.
 
 ## Stretch Goals Not Built
 

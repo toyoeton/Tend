@@ -17,9 +17,13 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
     "@prisma/client": "^5.22.0",
+    "@solana/pay": "^0.2.6",
+    "@solana/web3.js": "^1.98.4",
+    "bignumber.js": "^9.3.1",
     "googleapis": "^144.0.0",
     "next": "^14.2.35",
     "next-auth": "^4.24.10",
+    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "resend": "^4.0.1",

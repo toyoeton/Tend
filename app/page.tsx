@@ -20,7 +20,7 @@ export default function HomePage() {
       </div>
       <div className="border border-line bg-white p-5">
         <div className="flex items-center justify-between border-b border-line pb-3">
-          <span className="font-semibold">Today in Lagos</span>
+          <span className="font-semibold">Today in Uyo</span>
           <span className="text-sm text-accent">Open slots</span>
         </div>
         {["QuickFold Laundry", "Amina Home Care", "Tayo Errands"].map((name, index) => (

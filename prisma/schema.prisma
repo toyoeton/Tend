@@ -29,6 +29,7 @@ enum BookingStatus {
 
 enum PaymentStatus {
   PENDING
+  CONFIRMED
   SUCCESS
   FAILED
   REFUNDED
@@ -106,6 +107,7 @@ model Booking {
   customerLocation  String?
   price             Int
   paymentStatus     PaymentStatus   @default(PENDING)
+  paymentReference  String?         @unique
   paystackRef       String?         @unique
   googleEventId     String?
   cancelReason      String?
