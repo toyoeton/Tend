@@ -8,6 +8,7 @@ const serviceTypes = ["LAUNDRY", "CLEANING", "DISPATCH", "OTHER"] as const;
 export function ProviderProfileForm() {
   const router = useRouter();
   const [message, setMessage] = useState("");
+  const [showServiceForm, setShowServiceForm] = useState(false);
 
   async function submitProfile(formData: FormData) {
     const response = await fetch("/api/providers/me", {
@@ -53,21 +54,32 @@ export function ProviderProfileForm() {
         </label>
         <button className="rounded bg-accent px-4 py-2 text-sm font-semibold text-white">Save profile</button>
       </form>
-      <form action={(data) => void submitService(data)} className="grid gap-3 border border-line bg-white p-5">
-        <h2 className="font-semibold">Add service</h2>
-        <select name="type" className="border border-line px-3 py-2">
-          {serviceTypes.map((type) => (
-            <option key={type} value={type}>
-              {type.toLowerCase()}
-            </option>
-        ))}
-        </select>
-        <input name="name" placeholder="Service name" className="border border-line px-3 py-2" required />
-        <textarea name="description" placeholder="Description" className="min-h-20 border border-line px-3 py-2" />
-        <input name="price" type="number" placeholder="Price in naira" className="border border-line px-3 py-2" required />
-        <input name="durationMins" type="number" placeholder="Duration minutes" className="border border-line px-3 py-2" required />
-        <button className="rounded bg-accent px-4 py-2 text-sm font-semibold text-white">Add service</button>
-      </form>
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowServiceForm((visible) => !visible)}
+          className="rounded border border-accent px-4 py-2 text-sm font-semibold text-accent"
+        >
+          {showServiceForm ? "− Close" : "+ Add service"}
+        </button>
+        {showServiceForm ? (
+          <form action={(data) => void submitService(data)} className="mt-3 grid gap-3 border border-line bg-white p-5">
+            <h2 className="font-semibold">Add service</h2>
+            <select name="type" className="border border-line px-3 py-2">
+              {serviceTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type.toLowerCase()}
+                </option>
+              ))}
+            </select>
+            <input name="name" placeholder="Service name" className="border border-line px-3 py-2" required />
+            <textarea name="description" placeholder="Description" className="min-h-20 border border-line px-3 py-2" />
+            <input name="price" type="number" placeholder="Price in naira" className="border border-line px-3 py-2" required />
+            <input name="durationMins" type="number" placeholder="Duration minutes" className="border border-line px-3 py-2" required />
+            <button className="rounded bg-accent px-4 py-2 text-sm font-semibold text-white">Add service</button>
+          </form>
+        ) : null}
+      </div>
       {message ? <p className="text-sm text-accent">{message}</p> : null}
     </div>
   );
