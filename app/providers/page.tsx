@@ -65,7 +65,7 @@ export default async function ProvidersPage({ searchParams }: { searchParams: { 
             <div className="mt-4 flex flex-wrap gap-2">
               {provider.services.map((service) => (
                 <span key={service.id} className="rounded border border-line px-2 py-1 text-sm">
-                  {service.name} · {formatKobo(service.price)}
+                  {service.name} · {formatKobo(service.price)}{service.solPrice ? ` · ${service.solPrice} SOL` : ""}
                 </span>
               ))}
             </div>

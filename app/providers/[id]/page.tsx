@@ -42,7 +42,10 @@ export default async function ProviderDetailPage({ params }: { params: { id: str
                   <p className="font-medium">{service.name}</p>
                   <p className="text-sm text-muted">{service.description ?? service.type.toLowerCase()}</p>
                 </div>
-                <p className="font-semibold">{formatKobo(service.price)}</p>
+                <p className="font-semibold">
+                  {formatKobo(service.price)}
+                  {service.solPrice ? <span className="block text-sm text-accent">{service.solPrice} SOL</span> : null}
+                </p>
               </div>
             ))}
           </div>

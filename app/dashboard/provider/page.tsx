@@ -37,7 +37,9 @@ export default async function ProviderDashboardPage() {
             {profile?.services.map((service) => (
               <div key={service.id} className="border border-line bg-white p-4">
                 <p className="font-medium">{service.name}</p>
-                <p className="text-sm text-muted">{service.type.toLowerCase()} · {formatKobo(service.price)} · {service.durationMins}m</p>
+                <p className="text-sm text-muted">
+                  {service.type.toLowerCase()} · {formatKobo(service.price)}{service.solPrice ? ` · ${service.solPrice} SOL` : ""} · {service.durationMins}m
+                </p>
               </div>
             ))}
           </div>

@@ -34,6 +34,7 @@ export function ProviderProfileForm() {
         name: String(formData.get("name")),
         description: String(formData.get("description")),
         price: Math.round(Number(formData.get("price")) * 100),
+        solPrice: formData.get("solPrice") ? Number(formData.get("solPrice")) : undefined,
         durationMins: Number(formData.get("durationMins"))
       })
     });
@@ -75,6 +76,7 @@ export function ProviderProfileForm() {
             <input name="name" placeholder="Service name" className="border border-line px-3 py-2" required />
             <textarea name="description" placeholder="Description" className="min-h-20 border border-line px-3 py-2" />
             <input name="price" type="number" placeholder="Price in naira" className="border border-line px-3 py-2" required />
+            <input name="solPrice" type="number" min="0" step="0.0001" placeholder="Price in SOL (optional)" className="border border-line px-3 py-2" />
             <input name="durationMins" type="number" placeholder="Duration minutes" className="border border-line px-3 py-2" required />
             <button className="rounded bg-accent px-4 py-2 text-sm font-semibold text-white">Add service</button>
           </form>
