@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { BookingWidget } from "@/components/booking-widget";
 import { formatKobo } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
+import { displaySolPrice, getSolNgnRate } from "@/lib/solana-price";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function ProviderDetailPage({ params }: { params: { id: str
     }
   });
   if (!provider) notFound();
+  const solNgnRate = await getSolNgnRate();
 
   return (
     <section className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[1fr_360px]">
@@ -42,7 +44,12 @@ export default async function ProviderDetailPage({ params }: { params: { id: str
                   <p className="font-medium">{service.name}</p>
                   <p className="text-sm text-muted">{service.description ?? service.type.toLowerCase()}</p>
                 </div>
-                <p className="font-semibold">{formatKobo(service.price)}</p>
+                <p className="font-semibold">
+                  {formatKobo(service.price)}
+                  {displaySolPrice(service.price, service.solPrice, solNgnRate) ? (
+                    <span className="block text-sm text-accent">{displaySolPrice(service.price, service.solPrice, solNgnRate)}</span>
+                  ) : null}
+                </p>
               </div>
             ))}
           </div>

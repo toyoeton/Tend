@@ -8,6 +8,7 @@ import { conflictingBookingWhere } from "@/lib/availability";
 import { env } from "@/lib/env";
 import { initializePaystackTransaction } from "@/lib/paystack";
 import { sendEmail } from "@/lib/email";
+import { resolveSolPrice } from "@/lib/solana-price";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
   const customer = await prisma.user.findUnique({ where: { id: auth.session.user.id } });
   if (!customer) return NextResponse.json({ error: "Customer not found" }, { status: 404 });
   const reference = `tend_${crypto.randomUUID().replaceAll("-", "")}`;
+  const solPrice = await resolveSolPrice(service.price);
 
   const booking = await prisma.$transaction(async (tx) => {
     const conflict = await tx.booking.findFirst({
@@ -54,6 +56,7 @@ export async function POST(request: Request) {
         scheduledEnd,
         customerLocation: body.customerLocation,
         price: service.price,
+        solPrice: solPrice.toNumber(),
         paystackRef: reference,
         status: BookingStatus.PENDING_PAYMENT,
         paymentStatus: PaymentStatus.PENDING
