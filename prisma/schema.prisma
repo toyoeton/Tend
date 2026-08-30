@@ -107,6 +107,7 @@ model Booking {
   status            BookingStatus   @default(PENDING_PAYMENT)
   customerLocation  String?
   price             Int
+  solPrice          Float?
   paymentStatus     PaymentStatus   @default(PENDING)
   paymentReference  String?         @unique
   paystackRef       String?         @unique

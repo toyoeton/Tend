@@ -34,7 +34,7 @@ export async function GET(request: Request) {
   try {
     const reference = new PublicKey(body.data.reference);
     const signature = await findAndValidateSolanaPayment({
-      amount: bookingPriceInSol(booking.price),
+      amount: bookingPriceInSol(booking.solPrice),
       reference
     });
 
