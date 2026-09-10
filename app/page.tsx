@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { AuthButtons } from "@/components/auth-buttons";
+import { ProviderProfileForm } from "@/components/provider-profile-form";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
+
   return (
     <section className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-[1.1fr_0.9fr] md:py-16">
       <div className="flex flex-col justify-center">
         <p className="mb-3 text-sm font-semibold uppercase text-accent">Local services, booked ahead</p>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-normal md:text-6xl">Tend</h1>
         <p className="mt-5 max-w-xl text-lg leading-8 text-muted">
-          Browse nearby laundry, cleaning, dispatch, and errand providers. Pick a slot, pay upfront, and manage the
+          Browse nearby laundry, cleaning, dispatch, and errand providers. Pick a slot, pay upfront in solana/cash, and manage the
           booking without back-and-forth calls.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -16,6 +21,31 @@ export default function HomePage() {
             Browse providers
           </Link>
           <AuthButtons />
+        </div>
+        <div className="mt-6 flex flex-wrap gap-3 text-sm">
+          {session?.user.role === "PROVIDER" ? (
+            <>
+              <Link href="/dashboard/provider" className="rounded border border-line px-4 py-2 font-semibold">
+                Provider dashboard
+              </Link>
+              <Link href="/dashboard/provider" className="rounded border border-accent px-4 py-2 font-semibold text-accent">
+                + Add service
+              </Link>
+            </>
+          ) : session?.user.role === "CUSTOMER" ? (
+            <Link href="/dashboard/customer" className="rounded border border-line px-4 py-2 font-semibold">
+              Customer bookings
+            </Link>
+          ) : (
+            <>
+              <Link href="/onboarding" className="rounded border border-line px-4 py-2 font-semibold">
+                Customer portal
+              </Link>
+              <Link href="/onboarding" className="rounded border border-accent px-4 py-2 font-semibold text-accent">
+                Provider portal
+              </Link>
+            </>
+          )}
         </div>
       </div>
       <div className="border border-line bg-white p-5">
@@ -32,6 +62,13 @@ export default function HomePage() {
             <span className="self-start rounded border border-line px-2 py-1 text-sm">{index + 3} slots</span>
           </div>
         ))}
+      </div>
+      <div className="md:col-span-2">
+        <div className="mb-4">
+          <h2 className="text-2xl font-semibold">Create a provider listing</h2>
+          <p className="mt-2 text-muted">Add your business and services. Sign in as a provider to save your listing.</p>
+        </div>
+        <ProviderProfileForm />
       </div>
     </section>
   );

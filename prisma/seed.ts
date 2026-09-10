@@ -59,6 +59,61 @@ async function main() {
         { type: ServiceType.DISPATCH, name: "Local errand", price: 500000, durationMins: 60 },
         { type: ServiceType.DISPATCH, name: "Priority dispatch", price: 850000, durationMins: 45 }
       ]
+    },
+    {
+      email: "glow@tend.local",
+      name: "Ngozi Eze",
+      googleId: "seed-google-glow",
+      businessName: "Glow Beauty Studio",
+      bio: "At-home beauty treatments and event-ready styling.",
+      latitude: 6.5158,
+      longitude: 3.3677,
+      address: "Surulere, Lagos",
+      services: [{ type: ServiceType.OTHER, name: "Makeup session", price: 1800000, solPrice: 0.03, durationMins: 90 }]
+    },
+    {
+      email: "fixit@tend.local",
+      name: "Bassey Udo",
+      googleId: "seed-google-fixit",
+      businessName: "FixIt Home Repairs",
+      bio: "Reliable plumbing, electrical, and small home repairs.",
+      latitude: 6.5486,
+      longitude: 3.3764,
+      address: "Ilupeju, Lagos",
+      services: [{ type: ServiceType.OTHER, name: "Home repair visit", price: 1500000, solPrice: 0.025, durationMins: 120 }]
+    },
+    {
+      email: "fresh@tend.local",
+      name: "Kemi Adeola",
+      googleId: "seed-google-fresh",
+      businessName: "FreshBox Groceries",
+      bio: "Fresh produce and pantry essentials delivered to your door.",
+      latitude: 6.6012,
+      longitude: 3.3513,
+      address: "Maryland, Lagos",
+      services: [{ type: ServiceType.DISPATCH, name: "Grocery delivery", price: 700000, solPrice: 0.012, durationMins: 60 }]
+    },
+    {
+      email: "tutor@tend.local",
+      name: "David Okafor",
+      googleId: "seed-google-tutor",
+      businessName: "BrightPath Tutors",
+      bio: "Patient one-on-one tutoring for school and exam preparation.",
+      latitude: 6.5249,
+      longitude: 3.3798,
+      address: "Gbagada, Lagos",
+      services: [{ type: ServiceType.OTHER, name: "Private tutoring", price: 1000000, solPrice: 0.018, durationMins: 60 }]
+    },
+    {
+      email: "petcare@tend.local",
+      name: "Femi Adebayo",
+      googleId: "seed-google-petcare",
+      businessName: "Paws & Care",
+      bio: "Friendly pet sitting, walking, and basic grooming services.",
+      latitude: 6.4474,
+      longitude: 3.3903,
+      address: "Lekki, Lagos",
+      services: [{ type: ServiceType.OTHER, name: "Pet care visit", price: 900000, solPrice: 0.015, durationMins: 60 }]
     }
   ];
 

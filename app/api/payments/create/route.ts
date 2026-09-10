@@ -1,7 +1,8 @@
 import { PaymentStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { bookingPriceInSol, createSolanaPaymentUrl, generatePaymentReference } from "@/lib/solana-pay";
+import { createSolanaPaymentUrl, generatePaymentReference } from "@/lib/solana-pay";
+import { resolveSolPrice } from "@/lib/solana-price";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
   }
 
   const reference = generatePaymentReference();
-  const amount = bookingPriceInSol(booking.price);
+  const amount = await resolveSolPrice(booking.price, booking.solPrice);
   const message = `Booking payment for ${booking.service.name}/${booking.scheduledStart.toISOString()}`;
   const url = createSolanaPaymentUrl({ amount, reference, message });
 

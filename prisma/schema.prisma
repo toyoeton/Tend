@@ -88,6 +88,7 @@ model Service {
   name         String
   description  String?
   price        Int
+  solPrice     Float?
   durationMins Int
   isActive     Boolean         @default(true)
   bookings     Booking[]
@@ -106,6 +107,7 @@ model Booking {
   status            BookingStatus   @default(PENDING_PAYMENT)
   customerLocation  String?
   price             Int
+  solPrice          Float?
   paymentStatus     PaymentStatus   @default(PENDING)
   paymentReference  String?         @unique
   paystackRef       String?         @unique

@@ -11,6 +11,7 @@ const schema = z.object({
   name: z.string().min(2),
   description: z.string().optional(),
   price: z.number().int().positive(),
+  solPrice: z.number().positive().optional(),
   durationMins: z.number().int().min(30),
   isActive: z.boolean().default(true)
 });

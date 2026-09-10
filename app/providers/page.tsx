@@ -2,35 +2,29 @@ import Link from "next/link";
 import { ServiceType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { formatKobo } from "@/lib/money";
+import { displaySolPrice, getSolNgnRate } from "@/lib/solana-price";
 import { parseServiceType } from "@/lib/service-types";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProvidersPage({ searchParams }: { searchParams: { serviceType?: string } }) {
   const serviceType = parseServiceType(searchParams.serviceType);
-
   const providers = await prisma.providerProfile.findMany({
     where: {
       isActive: true,
-      ...(serviceType && {
-        services: { some: { isActive: true, type: serviceType } },
-      }),
+      ...(serviceType && { services: { some: { isActive: true, type: serviceType } } })
     },
     include: {
       services: {
-        where: {
-          isActive: true,
-          ...(serviceType && { type: serviceType }),
-        },
+        where: { isActive: true, ...(serviceType && { type: serviceType }) },
         orderBy: { price: "asc" },
-        take: 3,
-      },
+        take: 3
+      }
     },
     orderBy: { avgRating: "desc" },
-    take: 30,
+    take: 30
   });
-
-  
+  const solNgnRate = await getSolNgnRate();
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-8">
@@ -42,11 +36,7 @@ export default async function ProvidersPage({ searchParams }: { searchParams: { 
         <form className="flex gap-2">
           <select name="serviceType" defaultValue={serviceType ?? ""} className="border border-line bg-white px-3 py-2">
             <option value="">All services</option>
-            {Object.values(ServiceType).map((type) => (
-              <option key={type} value={type}>
-                {type.toLowerCase()}
-              </option>
-            ))}
+            {Object.values(ServiceType).map((type) => <option key={type} value={type}>{type.toLowerCase()}</option>)}
           </select>
           <button className="rounded bg-accent px-4 py-2 text-sm font-semibold text-white">Apply</button>
         </form>
@@ -63,11 +53,10 @@ export default async function ProvidersPage({ searchParams }: { searchParams: { 
             </div>
             <p className="mt-3 line-clamp-2 text-sm text-muted">{provider.bio}</p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {provider.services.map((service) => (
-                <span key={service.id} className="rounded border border-line px-2 py-1 text-sm">
-                  {service.name} · {formatKobo(service.price)}
-                </span>
-              ))}
+              {provider.services.map((service) => {
+                const solPrice = displaySolPrice(service.price, service.solPrice, solNgnRate);
+                return <span key={service.id} className="rounded border border-line px-2 py-1 text-sm">{service.name} · {formatKobo(service.price)}{solPrice ? ` · ${solPrice}` : ""}</span>;
+              })}
             </div>
           </Link>
         ))}

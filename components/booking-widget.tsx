@@ -3,6 +3,7 @@
 import type { Service } from "@prisma/client";
 import { useState } from "react";
 import { formatKobo } from "@/lib/money";
+import { SolanaPayCheckout } from "@/components/SolanaPayCheckout";
 
 type Slot = { start: string; end: string };
 
@@ -13,6 +14,7 @@ export function BookingWidget({ providerId, services }: { providerId: string; se
   const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string>("");
+  const [solanaBookingId, setSolanaBookingId] = useState<string | null>(null);
 
   async function loadSlots() {
     setLoading(true);
@@ -25,18 +27,36 @@ export function BookingWidget({ providerId, services }: { providerId: string; se
     setLoading(false);
   }
 
-  async function book() {
-    if (!selectedSlot) return;
-    setLoading(true);
+  async function createBooking() {
     const response = await fetch("/api/bookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ providerId, serviceId, scheduledStart: selectedSlot })
     });
-    const payload = (await response.json()) as { authorizationUrl?: string; error?: string };
+    const payload = (await response.json()) as { booking?: { id: string }; authorizationUrl?: string; error?: string };
+    return { response, payload };
+  }
+
+  async function book() {
+    if (!selectedSlot) return;
+    setLoading(true);
+    const { response, payload } = await createBooking();
     setLoading(false);
     if (payload.authorizationUrl) {
       window.location.href = payload.authorizationUrl;
+      return;
+    }
+    setMessage(payload.error ?? "Unable to start checkout");
+  }
+
+  async function bookWithSolana() {
+    if (!selectedSlot) return;
+    setLoading(true);
+    setMessage("");
+    const { response, payload } = await createBooking();
+    setLoading(false);
+    if (response.ok && payload.booking?.id) {
+      setSolanaBookingId(payload.booking.id);
       return;
     }
     setMessage(payload.error ?? "Unable to start checkout");
@@ -85,13 +105,27 @@ export function BookingWidget({ providerId, services }: { providerId: string; se
           ))}
         </div>
       ) : null}
-      <button
-        onClick={() => void book()}
-        disabled={!selectedSlot || !selectedService || loading}
-        className="mt-4 w-full rounded bg-accent px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
-      >
-        Continue to Paystack
-      </button>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        <button
+          onClick={() => void book()}
+          disabled={!selectedSlot || !selectedService || loading}
+          className="w-full rounded bg-accent px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+        >
+          Continue to Paystack
+        </button>
+        <button
+          onClick={() => void bookWithSolana()}
+          disabled={!selectedSlot || !selectedService || loading}
+          className="w-full rounded border border-accent px-4 py-2 text-sm font-semibold text-accent disabled:opacity-50"
+        >
+          Pay with Solana
+        </button>
+      </div>
+      {solanaBookingId ? (
+        <div className="mt-4">
+          <SolanaPayCheckout bookingId={solanaBookingId} />
+        </div>
+      ) : null}
       {message ? <p className="mt-3 text-sm text-muted">{message}</p> : null}
     </div>
   );
